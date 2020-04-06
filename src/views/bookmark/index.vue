@@ -46,7 +46,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </el-button></el-col>
-    <el-col :span="8"><el-button type="text" icon="el-icon-folder-opened" @mouseenter.native="openURL">游戏资源</el-button></el-col>
+    <el-col :span="8"><el-button type="text" icon="el-icon-folder-opened">游戏资源</el-button></el-col>
   </el-row>
 </template>
 <script>

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-const api_name = '/tools/user'
+const api_name = '/user'
 export function login(username, password) {
   return request({
     url: `${api_name}/login`,
@@ -10,6 +10,7 @@ export function login(username, password) {
     }
   })
 }
+
 export function getInfo(token) {
   return request({
     url: `${api_name}/info`,

@@ -1,35 +1,35 @@
 import request from "@/utils/request"
-import bookmark from "./bookmark";
-const api_name = "/tools/net-book-mark-type"
+import bookmark from "./Bookmark";
+const api_name = "/bookmark-classify"
 
 export default {
-  getNetBookMarkTypeList() {
+  getBookmarkClassifyList() {
     return request({
       url: `${api_name}/list`,
       method: "get"
     })
   },
-  saveBookMarkType(bookmarkType) {
+  saveBookmarkClassify(bookmarkType) {
     return request({
       url: `${api_name}/saveBookMarkType`,
       method: "post",
       data: bookmarkType
     })
   },
-  updateBookMarkTypeById(bookmarkType) {
+  updateBookmarkClassifyById(bookmarkType) {
     return request({
       url: `${api_name}/updateBookMarkTypeById`,
       method: "put",
       data: bookmarkType
     })
   },
-  deleteBookMarkTypeById(id) {
+  deleteBookmarkClassifyById(id) {
     return request({
       url: `${api_name}/deleteBookMarkTypeById/${id}`,
       method: "delete"
     })
   },
-  deleteAllBookMarkType(){
+  deleteAllBookmarkClassify(){
     return request({
       url: `${api_name}/deleteAllBookMarkType`,
       method: "get"

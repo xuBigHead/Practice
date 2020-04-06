@@ -5,8 +5,10 @@
     <div class="main-container">
       <navbar/>
       <app-main/>
+      <a href='http://www.beian.miit.gov.cn' target='_blank'>粤ICP备19124052号</a>
     </div>
   </div>
+
 </template>
 
 <script>

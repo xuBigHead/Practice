@@ -1,35 +1,35 @@
 import request from '@/utils/request'
-const api_name = '/tools/net-book-mark'
+const api_name = '/bookmark'
 
 export default {
-  getNetBookMarkByPage(page, limit, searchObj) {
+  list(query) {
     return request({
-      url: `${api_name}/${page}/${limit}`,
-      method: 'post',
-      data: searchObj
+      url: `${api_name}/list`,
+      method: 'get',
+      params: query
     })
   },
-  saveBookMark(bookMark) {
+  save(bookmark) {
     return request({
-      url: `${api_name}/saveBookMark`,
+      url: `${api_name}/save`,
       method: 'post',
-      data: bookMark
+      data: bookmark
     })
   },
-  getBookMarkById(id) {
+  getBookmarkById(id) {
     return request({
       url: `${api_name}/${id}`,
       method: 'get'
     })
   },
-  updateBookMarkById(bookMark) {
+  updateBookmarkById(bookMark) {
     return request({
       url: `${api_name}/updateBookMarkById`,
       method: 'put',
       data: bookMark
     })
   },
-  deleteBookMarkById(id) {
+  deleteBookmarkById(id) {
     return request({
       url: `${api_name}/deleteBookMarkById/${id}`,
       method: 'delete'
