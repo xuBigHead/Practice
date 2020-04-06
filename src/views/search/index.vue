@@ -30,15 +30,9 @@
             <el-tab-pane label="书签栏">
               <!-- <div>this is echarts</div> -->
               <div style="float: left">
-                <el-button v-if="editMode" type="text" @click="saveBookmarkClassify">添加书签类型&nbsp;&nbsp;</el-button>
-                <br>
-                <el-button v-if="editMode" type="text" @click="deleteAllBookmark">删除所有书签&nbsp;&nbsp;</el-button>
-                <br>
-                <!-- <el-button v-if="editMode" type="text" @click="showChart">显示书签图标&nbsp;&nbsp;</el-button>
-                <br>-->
+                <el-button v-if="editMode" type="text" @click="saveBookmarkClassify">添加书签类型&nbsp;&nbsp;</el-button><br>
                 <el-upload class="upload-demo" action="http://39.108.87.253:8002/tools/net-book-mark/importBookMarkFile"
-                           :limit="1"
-                           :on-success="onSuccess" :on-progress="onUploading" :disabled="btnDisabled">
+                           :limit="1" :on-success="onSuccess" :on-progress="onUploading" :disabled="btnDisabled">
                   <el-button v-if="editMode" type="text">导入书签列表&nbsp;&nbsp;</el-button>
                 </el-upload>
               </div>
@@ -81,18 +75,10 @@
         </div>
       </el-col>
     </el-row>
-    <!-- 删除所有书签 -->
-    <el-dialog :visible.sync="deleteAllDialog" width="30%" center>
-      <span style="color:red">确认删除所有书签吗？该操作不可恢复！！！</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="resetDeleteAllDialog">取 消</el-button>
-        <el-button type="primary" @click="deleteAllBookmarkConfirm" :disabled="btnDisabled">确 定</el-button>
-      </span>
-    </el-dialog>
     <!-- 删除书签弹框 -->
     <el-dialog :visible.sync="deleteDialog" width="30%" center>
       确认删除
-      <span style="color: red">{{bookMarkName}}</span>吗？
+      <span style="color: red">{{this.bookmark.title}}</span>吗？
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetDeleteDialog">取 消</el-button>
         <el-button type="primary" @click="deleteBookmarkConfirm" :disabled="btnDisabled">确 定</el-button>
@@ -241,7 +227,7 @@
       },
       getBookmarkClassifyList() { // 获取书签类型列表
         bookmarkClassify
-          .getBookmarkClassifyList()
+          .list()
           .then(response => {
             console.log(response.data)
             this.bookmarkClassifyList = response.data
@@ -263,10 +249,10 @@
         this.bookmarkBarOrGetBookmarkList()
       },
       // 打开删除书签对话框
-      deleteBookmark(name, id) {
+      deleteBookmark(title, id) {
         this.deleteDialog = true
-        this.bookMarkName = name
-        this.bookMarkId = id
+        this.bookmark.title = title
+        this.bookmark.id = id
       },
       // 确认删除书签
       deleteBookmarkConfirm() {
@@ -276,7 +262,7 @@
           this.page = this.page - 1
         }
         bookmark
-          .deleteBookmarkById(this.bookMarkId)
+          .delete(this.bookmark)
           .then(response => {
             this.deleteDialog = false
             this.getBookmarkList()
@@ -299,8 +285,8 @@
       // 点击删除书签弹框取消按钮初始化弹框条件
       resetDeleteDialog() {
         this.deleteDialog = false
-        this.bookMarkName = ''
-        this.bookMarkId = ''
+        this.bookmarkTitle = ''
+        this.bookmarkId = ''
       },
       updateBookmark(title, url, id, classifyId) {
         this.updateDialog = true
@@ -321,12 +307,12 @@
           } else {
             this.btnDisabled = true
             bookmark
-              .updateBookmarkById(this.bookmark)
+              .update(this.bookmark)
               .then(response => {
                 this.getBookmarkList()
                 this.$message({
                   type: 'success',
-                  message:  response.msg
+                  message: response.msg
                 })
                 this.resetUpdateDialog()
               })
@@ -346,12 +332,11 @@
               message: '添加书签名称长度不能超过50个字母'
             })
           } else {
+            this.bookmark.id = null
             this.btnDisabled = true
-            console.log(this.total)
             // 如果添加书签时总数刚好是每页书签个数的整数倍，则跳转到下一页
             if (this.total % this.limit === 0) {
               this.page = this.page + 1
-              console.log(this.page)
             }
             bookmark
               .save(this.bookmark)
@@ -413,7 +398,7 @@
           } else {
             this.btnDisabled = true
             bookmarkClassify
-              .updateBookmarkClassifyById(this.bookmarkClassify)
+              .update(this.bookmarkClassify)
               .then(response => {
                 this.$message({
                   type: 'success',
@@ -442,7 +427,7 @@
           } else {
             this.btnDisabled = true
             bookmarkClassify
-              .saveBookmarkClassify(this.bookmarkClassify)
+              .save(this.bookmarkClassify)
               .then(response => {
                 this.$message({
                   type: 'success',
@@ -466,7 +451,7 @@
         this.btnDisabled = true
         // 删除书签类型
         bookmarkClassify
-          .deleteBookmarkClassifyById(this.bookmarkClassify.id)
+          .delete(this.bookmarkClassify)
           .then(response => {
             this.$message({
               type: 'success',
@@ -508,30 +493,6 @@
       },
       deleteAllBookmark() {
         this.deleteAllDialog = true
-      },
-      resetDeleteAllDialog() {
-        this.deleteAllDialog = false
-        this.btnDisabled = false
-      },
-      deleteAllBookmarkConfirm() {
-        this.btnDisabled = true
-        bookmarkClassify
-          .deleteAllBookmarkClassify()
-          .then(response => {
-            this.$message({
-              type: 'success',
-              message: response.msg
-            })
-            this.resetDeleteAllDialog()
-            this.getBookmarkClassifyList()
-          }).catch(error => {
-          console.log(error)
-          this.$message({
-            type: 'error',
-            message: '删除所有书签失败'
-          })
-          this.btnDisabled = false
-        })
       },
       onUploading() {
         this.btnDisabled = true

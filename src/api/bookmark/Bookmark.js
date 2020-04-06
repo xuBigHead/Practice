@@ -16,23 +16,30 @@ export default {
       data: bookmark
     })
   },
+  delete(bookmark) {
+    return request({
+      url: `${api_name}/delete`,
+      method: 'post',
+      data: bookmark
+    })
+  },
+  update(bookMark) {
+    return request({
+      url: `${api_name}/update`,
+      method: 'post',
+      data: bookMark
+    })
+  },
+  getTitleOfUrl(url) {
+    return request({
+      url: url,
+      method: 'get',
+    })
+  },
   getBookmarkById(id) {
     return request({
       url: `${api_name}/${id}`,
       method: 'get'
-    })
-  },
-  updateBookmarkById(bookMark) {
-    return request({
-      url: `${api_name}/updateBookMarkById`,
-      method: 'put',
-      data: bookMark
-    })
-  },
-  deleteBookmarkById(id) {
-    return request({
-      url: `${api_name}/deleteBookMarkById/${id}`,
-      method: 'delete'
     })
   }
 }
